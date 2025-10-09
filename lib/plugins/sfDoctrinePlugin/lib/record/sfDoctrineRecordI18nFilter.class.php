@@ -46,6 +46,20 @@ class sfDoctrineRecordI18nFilter extends Doctrine_Record_Filter
     public function filterGet(Doctrine_Record $record, $name)
     {
         $culture = sfDoctrineRecord::getDefaultCulture();
+
+        // AI-generated: START - PHP 8 fix: Ensure Translation relation is loaded @dev: Claude
+        // In PHP 8, we need to explicitly check and load the translation if not already loaded
+        if (!isset($record['Translation']) || !$record['Translation']->contains($culture)) {
+            // Force load the translation for the current culture
+            $translation = $record->Translation[$culture];
+            // If the translation doesn't exist for current culture, try the default
+            if (!$translation || !$translation->exists()) {
+                $defaultCulture = sfConfig::get('sf_default_culture', 'en');
+                $translation = $record->Translation[$defaultCulture];
+            }
+        }
+        // AI-generated: END
+        
         if (isset($record['Translation'][$culture]) && '' != $record['Translation'][$culture][$name]) {
             return $record['Translation'][$culture][$name];
         }
