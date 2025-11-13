@@ -344,8 +344,13 @@ class sfDoctrineFormFilterGenerator extends sfDoctrineFormGenerator
     {
         $php = var_export($values, true);
         $php = str_replace("\n", '', $php);
-        $php = str_replace('array (  ', 'array(', $php);
-        $php = str_replace(',)', ')', $php);
+        // AI-generated: START - Convert array() syntax to [] @dev: Marco Grossi
+        $php = str_replace('array (  ', '[', $php);
+        $php = str_replace('array (', '[', $php);
+        $php = str_replace('array(', '[', $php);
+        $php = str_replace(',)', ']', $php);
+        $php = str_replace(')', ']', $php);
+        // AI-generated: END
 
         return str_replace('  ', ' ', $php);
     }
