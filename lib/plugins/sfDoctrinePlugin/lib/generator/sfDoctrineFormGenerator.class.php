@@ -347,7 +347,7 @@ class sfDoctrineFormGenerator extends sfGenerator
             $options[] = '\'choices\' => '.$this->arrayExport(array_combine($column['values'], $column['values']));
         }
 
-        return count($options) ? sprintf('array(%s)', implode(', ', $options)) : '';
+        return count($options) ? sprintf('[%s]', implode(', ', $options)) : '';
     }
 
     /**
@@ -444,7 +444,7 @@ class sfDoctrineFormGenerator extends sfGenerator
                 $options[] = sprintf('\'model\' => $this->getRelatedModelName(\'%s\')', $column->getRelationKey('alias'));
             }
         } elseif ($column->isPrimaryKey()) {
-            $options[] = sprintf('\'choices\' => array($this->getObject()->get(\'%s\')), \'empty_value\' => $this->getObject()->get(\'%1$s\')', $column->getFieldName());
+            $options[] = sprintf('\'choices\' => [$this->getObject()->get(\'%s\')], \'empty_value\' => $this->getObject()->get(\'%1$s\')', $column->getFieldName());
         } else {
             switch ($column->getDoctrineType()) {
                 case 'string':
@@ -473,7 +473,7 @@ class sfDoctrineFormGenerator extends sfGenerator
             $options[] = '\'required\' => false';
         }
 
-        return count($options) ? sprintf('array(%s)', implode(', ', $options)) : '';
+        return count($options) ? sprintf('[%s]', implode(', ', $options)) : '';
     }
 
     /**
@@ -518,7 +518,7 @@ class sfDoctrineFormGenerator extends sfGenerator
      */
     public function getPrimaryKeyColumNamesAsString()
     {
-        return sprintf('array(\'%s\')', implode('\', \'', $this->getPrimaryKeyColumNames()));
+        return sprintf('[\'%s\']', implode('\', \'', $this->getPrimaryKeyColumNames()));
     }
 
     /**
@@ -696,8 +696,13 @@ class sfDoctrineFormGenerator extends sfGenerator
     {
         $php = var_export($values, true);
         $php = str_replace("\n", '', $php);
-        $php = str_replace('array (  ', 'array(', $php);
-        $php = str_replace(',)', ')', $php);
+        // AI-generated: START - Convert array() syntax to [] @dev: Marco Grossi
+        $php = str_replace('array (  ', '[', $php);
+        $php = str_replace('array (', '[', $php);
+        $php = str_replace('array(', '[', $php);
+        $php = str_replace(',)', ']', $php);
+        $php = str_replace(')', ']', $php);
+        // AI-generated: END
 
         return str_replace('  ', ' ', $php);
     }
