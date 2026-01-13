@@ -31,6 +31,7 @@ abstract class sfDatabaseSessionStorage extends sfSessionStorage
      *   * db_id_col:   The database column in which the session id will be stored (sess_id by default)
      *   * db_data_col: The database column in which the session data will be stored (sess_data by default)
      *   * db_time_col: The database column in which the session timestamp will be stored (sess_time by default)
+     *   * db_core_changes: The database column in which the core changes flag will be stored (core_changes by default)
      *
      * @param array $options An associative array of options
      *
@@ -46,6 +47,7 @@ abstract class sfDatabaseSessionStorage extends sfSessionStorage
             'db_id_col' => 'sess_id',
             'db_data_col' => 'sess_data',
             'db_time_col' => 'sess_time',
+            'db_core_changes' => 'core_changes',
         ], $options);
 
         // disable auto_start

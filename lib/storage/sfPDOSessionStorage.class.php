@@ -92,6 +92,7 @@ class sfPDOSessionStorage extends sfDatabaseSessionStorage
         $db_data_col = $this->options['db_data_col'];
         $db_id_col = $this->options['db_id_col'];
         $db_time_col = $this->options['db_time_col'];
+        $db_core_changes = $this->options['db_core_changes'];
 
         try {
             $sql = 'SELECT '.$db_data_col.' FROM '.$db_table.' WHERE '.$db_id_col.'=?';
@@ -108,12 +109,13 @@ class sfPDOSessionStorage extends sfDatabaseSessionStorage
             }
 
             // session does not exist, create it
-            $sql = 'INSERT INTO '.$db_table.'('.$db_id_col.', '.$db_data_col.', '.$db_time_col.') VALUES (?, ?, ?)';
+            $sql = 'INSERT INTO '.$db_table.'('.$db_id_col.', '.$db_data_col.', '.$db_time_col.', '.$db_core_changes.') VALUES (?, ?, ?, ?)';
 
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(1, $id, PDO::PARAM_STR);
             $stmt->bindValue(2, '', PDO::PARAM_STR);
             $stmt->bindValue(3, time(), PDO::PARAM_INT);
+            $stmt->bindValue(4, 0, PDO::PARAM_INT);
             $stmt->execute();
 
             return '';
@@ -139,8 +141,9 @@ class sfPDOSessionStorage extends sfDatabaseSessionStorage
         $db_data_col = $this->options['db_data_col'];
         $db_id_col = $this->options['db_id_col'];
         $db_time_col = $this->options['db_time_col'];
+        $db_core_changes = $this->options['db_core_changes'];
 
-        $sql = 'UPDATE '.$db_table.' SET '.$db_data_col.' = ?, '.$db_time_col.' = '.time().' WHERE '.$db_id_col.'= ?';
+        $sql = 'UPDATE '.$db_table.' SET '.$db_data_col.' = ?, '.$db_time_col.' = '.time().', '.$db_core_changes.' = 0 WHERE '.$db_id_col.'= ?';
 
         try {
             $stmt = $this->db->prepare($sql);
