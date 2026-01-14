@@ -51,7 +51,8 @@ mysql_select_db('sf_mysql_storage_unit_test', $connection);
 mysql_query("CREATE TABLE `session` (
   `sess_id` varchar(40) NOT NULL PRIMARY KEY,
   `sess_time` int(10) unsigned NOT NULL default '0',
-  `sess_data` text collate utf8_unicode_ci
+  `sess_data` text collate utf8_unicode_ci,
+  `core_changes` int(10) unsigned NOT NULL default '0'
 ) ENGINE=MyISAM", $connection)
   or $t->fail('Can not create table session');
 

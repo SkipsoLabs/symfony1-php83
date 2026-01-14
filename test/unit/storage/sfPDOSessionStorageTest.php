@@ -23,7 +23,7 @@ if (!extension_loaded('SQLite') && !extension_loaded('pdo_SQLite')) {
 // initialize the storage
 $database = new sfPDODatabase(['dsn' => 'sqlite::memory:']);
 $connection = $database->getConnection();
-$connection->exec('CREATE TABLE session (sess_id, sess_data, sess_time)');
+$connection->exec('CREATE TABLE session (sess_id, sess_data, sess_time, core_changes INTEGER DEFAULT 0)');
 
 ini_set('session.use_cookies', 0);
 $session_id = '1';
